@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.Text
+import androidx.compose.ui.platform.ComposeView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         initBinding()
         initRecyclerView()
         initViewModel()
+
     }
 
     override fun onStart() {
@@ -49,6 +52,9 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             vm = mainViewModel
             lifecycleOwner = this@MainActivity
+            composeView.setContent {
+                Text("Hello, compose!")
+            }
         }
     }
 
