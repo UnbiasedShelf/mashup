@@ -1,114 +1,128 @@
 package by.bstu.vs.stpms.lr13
 
-import android.content.Intent
-import android.net.Uri
+import android.Manifest
+import android.annotation.SuppressLint
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.ui.platform.ComposeView
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import by.bstu.vs.stpms.lr13.databinding.ActivityMainBinding
-import by.bstu.vs.stpms.lr13.model.Article
-import by.bstu.vs.stpms.lr13.recyclerview.ArticleAdapter
-import by.bstu.vs.stpms.lr13.retrofit.event.Status
+import androidx.compose.material.TextField
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import by.bstu.vs.stpms.lr13.data.model.LocationCity
 import by.bstu.vs.stpms.lr13.viewmodel.MainViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionRequired
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.android.gms.location.LocationServices
+import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
-    private lateinit var mainViewModel: MainViewModel
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var articleAdapter: ArticleAdapter
+    private val TAG = "MainActivity"
 
+    @ExperimentalPermissionsApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        initBinding()
-        initRecyclerView()
-        initViewModel()
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mainViewModel.getNews()
-    }
-
-    private fun initBinding() {
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(
-                this,
-                R.layout.activity_main
-        )
-        binding.apply {
-            vm = mainViewModel
-            lifecycleOwner = this@MainActivity
-            composeView.setContent {
-                Text("Hello, compose!")
-            }
+        setContent {
+            MainScreen()
         }
     }
 
-    private fun initRecyclerView() {
-        articleAdapter = ArticleAdapter(this)
-        articleAdapter.onClickListener = object : ArticleAdapter.OnClickListener {
-            override fun onVariantClick(article: Article?) {
-                article?.let {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(it.link)
-                    startActivity(intent)
+    //Permission checked by PermissionRequired
+    @SuppressLint("MissingPermission")
+    @ExperimentalPermissionsApi
+    @Composable
+    fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
+
+        val city by mainViewModel.city.observeAsState(initial = "")
+        val permissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
+        PermissionRequired(
+            permissionState = permissionState,
+            permissionNotGrantedContent = {
+                LaunchedEffect(true) {
+                    permissionState.launchPermissionRequest()
+                }
+            },
+            permissionNotAvailableContent = {
+                Column {
+                    Text(
+                        "Location permission denied. See this FAQ with information about why we " +
+                                "need this permission. Please, grant us access on the Settings screen."
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+
                 }
             }
-        }
+        ) {
 
-        recyclerView = findViewById<RecyclerView>(R.id.rv_news).apply {
-            isNestedScrollingEnabled = false
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = articleAdapter
+            LaunchedEffect(true) {
+                val locationProviderClient = LocationServices.getFusedLocationProviderClient(this@MainActivity)
+                locationProviderClient.lastLocation.addOnSuccessListener {
+                    val geocoder = Geocoder(this@MainActivity)
+                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                    val city = addresses.first().locality
+                    val country = addresses.first().countryName
+                    val locationCity = LocationCity(it.latitude, it.longitude, city, country)
+                    Log.i("MainActivity", "onLocationCityReceived: Received $locationCity")
+                    mainViewModel.onCityChanged(locationCity.city)
+                }
+            }
+
+            WeatherWidget(
+                city = city,
+                onCityChange = mainViewModel::onCityChanged,
+                onSubmit = mainViewModel::getWeather
+            )
         }
     }
 
-    private fun initViewModel() {
-        val newsProgressBar: ProgressBar = findViewById(R.id.news_progress)
+    @Composable
+    fun WeatherWidget(
+        city: String,
+        onCityChange: (String) -> Unit,
+        onSubmit: () -> Unit
+    ) {
+        val margin = 8.dp
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-        mainViewModel.newsLiveData.observe(this) { news -> articleAdapter.setArticles(news.data?.articles) }
-        mainViewModel.newsLiveData.observe(this, {
-            when (it.status) {
-                Status.ERROR -> {
-                    Toast.makeText(this, "error " + it.t?.message, Toast.LENGTH_SHORT).show()
-                    newsProgressBar.visibility = View.GONE
-                    recyclerView.visibility = View.VISIBLE
-                }
-                Status.SUCCESS -> {
-                    newsProgressBar.visibility = View.GONE
-                    recyclerView.visibility = View.VISIBLE
-                    Log.d("HTTP", "news: success")
-                }
-                Status.LOADING -> {
-                    newsProgressBar.visibility = View.VISIBLE
-                    recyclerView.visibility = View.GONE
-                    Log.d("HTTP", "news: loading")
+                TextField(
+                    value = city,
+                    onValueChange = onCityChange,
+                    placeholder = {
+                        Text(text = "City")
+                    },
+                    modifier = Modifier.padding(margin),
+                )
+                Button(
+                    onClick = onSubmit,
+                    modifier = Modifier.padding(margin),
+                ) {
+                    Text(text = "SUBMIT")
                 }
             }
-        })
 
-        mainViewModel.weatherLiveData.observe(this, {
-            when (it.status) {
-                Status.ERROR -> Toast.makeText(this, "error " + it.t?.message, Toast.LENGTH_SHORT)
-                        .show()
-                Status.SUCCESS -> Log.d("HTTP", "weather: success")
-                Status.LOADING -> Log.d("HTTP", "weather: loading")
-            }
-        })
+        }
+    }
+
+    @Preview
+    @Composable
+    fun DefaultPreview() {
+        WeatherWidget(city = "", onCityChange = { }, onSubmit = { })
     }
 }
 

@@ -1,8 +1,9 @@
-package by.bstu.vs.stpms.lr13.model
+package by.bstu.vs.stpms.lr13.data.network.model
 
 import com.google.gson.annotations.SerializedName
 
-class Weather {
+//TODO rewrite with dto
+class WeatherDto {
 
     @SerializedName("weather")
     var description: List<WeatherDescription>? = null
