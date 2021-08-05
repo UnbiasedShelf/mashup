@@ -11,12 +11,12 @@ class NewsRepository {
     //TODO di
     val newsApi: ApiNews = NetworkService.newsService()
 
-    suspend fun getNews(appId: String, country: String): List<Article>? {
+    suspend fun getNews(appId: String, country: String): List<Article> {
         val newsDto = newsApi.getNews(
             apiKey = appId,
             country = country
         )
-        val articles = newsDto.toArticleList()
+        val articles = newsDto.toArticleList() ?: listOf()
         Log.i(TAG, "getNews: return $articles")
         return articles
     }

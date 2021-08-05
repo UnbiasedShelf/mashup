@@ -1,38 +1,58 @@
 package by.bstu.vs.stpms.lr13.ui
 
 import android.app.Application
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import by.bstu.vs.stpms.lr13.R
+import by.bstu.vs.stpms.lr13.data.model.Article
+import by.bstu.vs.stpms.lr13.data.model.LocationCity
 import by.bstu.vs.stpms.lr13.data.model.Weather
-import by.bstu.vs.stpms.lr13.data.network.NetworkService
-import by.bstu.vs.stpms.lr13.data.network.model.WeatherDto
+import by.bstu.vs.stpms.lr13.data.repository.NewsRepository
+import by.bstu.vs.stpms.lr13.data.repository.WeatherRepository
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
     //TODO di
-    var apiNews = NetworkService.newsService()
-    var apiWeather = NetworkService.weatherService()
+    var newsRepository = NewsRepository()
+    var weatherRepository = WeatherRepository()
 
-    var weather by mutableStateOf()
+    var weather by mutableStateOf(Weather())
+    var articles: List<Article> by mutableStateOf(listOf())
 
+    private val _city = MutableLiveData(LocationCity())
+    val city: LiveData<LocationCity> = _city
 
-    private val _city = MutableLiveData("")
-    val city: LiveData<String> = _city
-
-    fun onCityChanged(newCity: String) {
+    fun onCityChanged(newCity: LocationCity) {
         _city.value = newCity
     }
 
     val weatherKey: String = application.getString(R.string.weather_key)
     val newsKey: String = application.getString(R.string.news_key)
 
-    fun getWeather(): Weather {
+    //TODO logs
+    fun getWeather(language: String, units: String) {
         viewModelScope.launch {
-            apiWeather
+            weather = weatherRepository.getWeather(
+                city = city.value!!,
+                appId = weatherKey,
+                units = units,
+                language = language
+            )
+        }
+    }
+
+    //TODO logs
+    fun getArticles(country: String) {
+        viewModelScope.launch {
+            articles = newsRepository.getNews(
+                appId = newsKey,
+                country = country
+            )
         }
     }
 
