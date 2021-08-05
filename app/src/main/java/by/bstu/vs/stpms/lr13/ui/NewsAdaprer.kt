@@ -1,4 +1,4 @@
-package by.bstu.vs.stpms.lr13.recyclerview
+package by.bstu.vs.stpms.lr13.ui
 //
 //import android.content.Context
 //import android.view.LayoutInflater

@@ -4,28 +4,18 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 
-class NewsDto {
+data class NewsDto(
     @SerializedName("articles")
-    var articles: List<Article>? = null
+    val articles: List<ArticleDto>?
+)
 
-}
-
-class Article {
+data class ArticleDto(
     @SerializedName("title")
-    var title: String? = null
+    val title: String?,
     @SerializedName("url")
-    var link: String? = null
+    val link: String?,
     @SerializedName("publishedAt")
-    var publishedAt: Date? = null
+    val publishedAt: Date?,
     @SerializedName("urlToImage")
-    var imageUrl: String? = null
-    //TODO remove
-//    companion object {
-//        @JvmStatic
-//        @BindingAdapter("android:text")
-//        fun bindDate(textView: TextView, date: Date?) {
-//            val dateFormat = SimpleDateFormat("dd.MM.YYYY HH:mm");
-//            textView.text = date?.let { dateFormat.format(date) }
-//        }
-//    }
-}
+    val imageUrl: String?,
+)

@@ -2,31 +2,37 @@ package by.bstu.vs.stpms.lr13.data.network.model
 
 import com.google.gson.annotations.SerializedName
 
-//TODO rewrite with dto
-class WeatherDto {
-
+data class WeatherDto(
     @SerializedName("weather")
-    var description: List<WeatherDescription>? = null
+    val description: List<WeatherDescriptionDto>?,
     @SerializedName("main")
-    var main: Main? = null
+    val main: MainDto?,
     @SerializedName("wind")
-    var wind: Wind? = null
+    val wind: WindDto?,
+)
+
+data class WeatherDescriptionDto(
+    @SerializedName("description")
+    val description: String?,
+    @SerializedName("icon")
+    val icon: String?
+)
+
+data class MainDto(
+    @SerializedName("temp")
+    val temperature: String?,
+    @SerializedName("pressure")
+    val pressure: String?,
+    @SerializedName("humidity")
+    val humidity: String?
+)
+
+data class WindDto(
+    @SerializedName("speed")
+    val speed: String?,
+    @SerializedName("deg")
+    val deg: String?,
+)
 
 
-    class WeatherDescription {
-        @SerializedName("description")
-        var description: String? = null
-    }
-    class Main {
-        @SerializedName("temp")
-        var temperature: String? = null
-        @SerializedName("pressure")
-        var pressure: String? = null
-        @SerializedName("humidity")
-        var humidity: String? = null
-    }
-    class Wind {
-        @SerializedName("speed")
-        var speed: String? = null
-    }
-}
+

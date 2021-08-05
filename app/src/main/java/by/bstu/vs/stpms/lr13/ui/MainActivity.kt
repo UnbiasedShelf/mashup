@@ -1,4 +1,4 @@
-package by.bstu.vs.stpms.lr13
+package by.bstu.vs.stpms.lr13.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import by.bstu.vs.stpms.lr13.data.model.LocationCity
-import by.bstu.vs.stpms.lr13.viewmodel.MainViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState

@@ -8,7 +8,6 @@ interface ApiNews {
     @GET("/v2/top-headlines")
     suspend fun getNews(
         @Query("apiKey") apiKey: String,
-        //google-news-ru
-        @Query("sources") sources: String
+        @Query("country") country: String
     ): NewsDto
 }

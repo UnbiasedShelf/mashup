@@ -10,6 +10,7 @@ interface ApiWeather {
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("appId") appId: String,
-        @Query("units") units: String
+        @Query("units") units: String,
+        @Query("lang") language: String,
     ): WeatherDto
 }
