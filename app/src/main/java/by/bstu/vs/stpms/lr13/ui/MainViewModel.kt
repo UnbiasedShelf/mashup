@@ -14,6 +14,7 @@ import by.bstu.vs.stpms.lr13.data.model.LocationCity
 import by.bstu.vs.stpms.lr13.data.model.Weather
 import by.bstu.vs.stpms.lr13.data.repository.NewsRepository
 import by.bstu.vs.stpms.lr13.data.repository.WeatherRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
@@ -21,14 +22,18 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     var newsRepository = NewsRepository()
     var weatherRepository = WeatherRepository()
 
+    val isRefreshing = MutableStateFlow(false)
+
     var weather by mutableStateOf(Weather())
     var articles: List<Article> by mutableStateOf(listOf())
 
     private val _city = MutableLiveData(LocationCity())
     val city: LiveData<LocationCity> = _city
 
-    fun onCityChanged(newCity: LocationCity) {
-        _city.value = newCity
+    fun onCityChanged(newCity: LocationCity?) {
+        newCity?.let {
+            _city.value = it
+        }
     }
 
     val weatherKey: String = application.getString(R.string.weather_key)

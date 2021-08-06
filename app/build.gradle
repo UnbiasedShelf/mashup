@@ -73,7 +73,6 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0"
 
-    implementation 'com.squareup.picasso:picasso:2.5.2'
 
     implementation 'androidx.compose.ui:ui:1.0.0'
     // Tooling support (Previews, etc.)
@@ -91,7 +90,11 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07'
     // Integration with observables
     implementation 'androidx.compose.runtime:runtime-livedata:1.0.0'
+
+
+
     implementation "com.google.accompanist:accompanist-permissions:0.16.0"
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.16.0"
 
 }
 kapt {

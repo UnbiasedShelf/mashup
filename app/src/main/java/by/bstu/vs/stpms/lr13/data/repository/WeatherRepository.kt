@@ -14,8 +14,8 @@ class WeatherRepository {
 
     suspend fun getWeather(city: LocationCity, appId: String, units: String, language: String): Weather {
         val weatherDto = weatherApi.getWeatherByCoords(
-            latitude = city.latitude,
-            longitude = city.longitude,
+            latitude = city.latitude!!,
+            longitude = city.longitude!!,
             appId = appId,
             units = units,
             language = language
