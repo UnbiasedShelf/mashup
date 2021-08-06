@@ -2,12 +2,7 @@ package by.bstu.vs.stpms.lr13.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -20,20 +15,17 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import by.bstu.vs.stpms.lr13.data.location.LocationService
 import by.bstu.vs.stpms.lr13.data.model.LocationCity
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.google.android.gms.location.LocationServices
 import java.util.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 class MainActivity : ComponentActivity() {
@@ -49,41 +41,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    //Permission checked by PermissionRequired
-    @SuppressLint("MissingPermission")
-    private suspend fun getLocationCity(): LocationCity? {
-        return suspendCoroutine { continuation ->
-            val locationProviderClient = LocationServices.getFusedLocationProviderClient(this@MainActivity)
-            locationProviderClient.lastLocation.addOnSuccessListener {
-                if (it != null) {
-                    val geocoder = Geocoder(this@MainActivity)
-                    val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-                    val city = addresses.first().locality
-                    val country = addresses.first().countryName
-                    val locationCity = LocationCity(it.latitude, it.longitude, city, country)
-                    Log.i("MainActivity", "getLocationCity: Received $locationCity")
-                    continuation.resume(locationCity)
-                } else {
-                    Log.w("MainActivity", "getLocationCity: Received null")
-                    continuation.resume(null)
-                }
-            }
-        }
-
-    }
-
     @ExperimentalPermissionsApi
     @Composable
+    @SuppressLint("MissingPermission") // Permission checked by PermissionRequired Composable
     fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
 
         val city by mainViewModel.city.observeAsState(initial = LocationCity())
-        val permissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
+        val permissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
         val isRefreshing by mainViewModel.isRefreshing.collectAsState()
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
             onRefresh = {
                 lifecycleScope.launchWhenStarted {
-                    mainViewModel.onCityChanged(getLocationCity())
+                    val locationCity = LocationService.getLocationCity(this@MainActivity)
+                    mainViewModel.onCityChanged(locationCity)
                 }
             }) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -107,7 +78,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     LaunchedEffect(true) {
-                        mainViewModel.onCityChanged(getLocationCity())
+                        val locationCity = LocationService.getLocationCity(this@MainActivity)
+                        mainViewModel.onCityChanged(locationCity)
                     }
 
                     WeatherWidget(
