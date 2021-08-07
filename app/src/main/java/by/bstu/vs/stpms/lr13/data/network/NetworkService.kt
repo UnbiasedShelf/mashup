@@ -9,8 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkService {
 
-    private const val BASE_NEWS_URL = "http://newsapi.org/"
-    private const val BASE_WEATHER_URL = "http://api.openweathermap.org/"
+    private const val BASE_NEWS_URL = "https://newsapi.org/"
+    private const val BASE_WEATHER_URL = "https://api.openweathermap.org/"
 
 
     private val loggingInterceptor = run {
@@ -46,4 +46,6 @@ object NetworkService {
                 .build()
                 .create(ApiWeather::class.java)
     }
+
+    fun getImageUrlByCode(code: String) = "https://openweathermap.org/img/wn/${code}@2x.png"
 }

@@ -1,19 +1,23 @@
 package by.bstu.vs.stpms.lr13.data
 
 import by.bstu.vs.stpms.lr13.data.model.Article
+import by.bstu.vs.stpms.lr13.data.model.MeasureUnits
 import by.bstu.vs.stpms.lr13.data.model.Weather
+import by.bstu.vs.stpms.lr13.data.network.NetworkService
 import by.bstu.vs.stpms.lr13.data.network.model.NewsDto
 import by.bstu.vs.stpms.lr13.data.network.model.WeatherDto
+import kotlin.math.roundToInt
 
-fun WeatherDto.toWeather(): Weather {
+fun WeatherDto.toWeather(units: MeasureUnits): Weather {
     return Weather(
-        description = this.description?.first()?.description,
-        temperature = this.main?.temperature?.toDoubleOrNull(),
-        pressure = this.main?.pressure?.toDoubleOrNull(),
-        humidity = this.main?.humidity?.toDoubleOrNull(),
-        windSpeed = this.wind?.speed?.toDoubleOrNull(),
-        windDirection = this.wind?.deg?.toDoubleOrNull(),
-        icon = this.description?.first()?.icon
+        city = name,
+        description = weather.first().description,
+        temperature = main.temperature.toDouble().roundToInt().toString(),
+        temperatureUnits = units.temperatureUnits,
+        humidity = "${main.humidity}%",
+        windSpeed = "${wind.speed} ${units.speedUnits}",
+        windDirectionDegrees = wind.deg.toDouble().roundToInt(),
+        icon = this.weather.first().icon.let { NetworkService.getImageUrlByCode(it) }
     )
 }
 
