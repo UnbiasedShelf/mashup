@@ -1,5 +1,6 @@
 package by.bstu.vs.stpms.lr13.data.model
 
+//TODO remove string to resources
 data class Weather(
     val city: String = "Undefined",
     val description: String = "Undefined",

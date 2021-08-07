@@ -132,16 +132,18 @@ class MainActivity : ComponentActivity() {
             ) {
                 Column {
                     if (weather != null) {
-                        //TODO remove string to resources
                         Text(
-                            text = weather.city ?: "Undefined",
+                            text = weather.city,
                             fontWeight = FontWeight.Bold,
                             fontSize = 24.sp
                         )
-                        Divider(thickness = 1.dp)
+                        Divider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colors.onPrimary
+                        )
                         Text(
-                            text = weather.description ?: "Undefined",
-                            fontSize = 18.sp,
+                            text = weather.description,
+                            fontSize = 20.sp,
                             fontStyle = FontStyle.Italic
                         )
                         Row(
@@ -165,7 +167,7 @@ class MainActivity : ComponentActivity() {
                                         append(weather.temperature)
                                     }
                                     withStyle(style = SpanStyle(
-                                        baselineShift = BaselineShift(+2.2f),
+                                        baselineShift = BaselineShift(+2f),
                                         fontSize = 20.sp
                                     )) {
                                         append(weather.temperatureUnits)
@@ -174,6 +176,18 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .offset(x = (-20).dp)
                             )
+                            Column(
+                                Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = weather.humidity,
+                                    fontSize = 20.sp
+                                )
+                                Text(
+                                    text = weather.windSpeed,
+                                    fontSize = 20.sp
+                                )
+                            }
                         }
                     }
                 }
