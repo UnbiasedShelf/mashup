@@ -13,6 +13,7 @@ import by.bstu.vs.stpms.lr13.data.model.MeasureUnits
 import by.bstu.vs.stpms.lr13.data.model.Weather
 import by.bstu.vs.stpms.lr13.data.repository.NewsRepository
 import by.bstu.vs.stpms.lr13.data.repository.WeatherRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -24,7 +25,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     val isRefreshing = MutableStateFlow(false)
 
-    var weather by mutableStateOf(Weather())
+    var weather by mutableStateOf<Weather?>(null)
     var articles: List<Article> by mutableStateOf(listOf())
 
     val weatherKey: String = application.getString(R.string.weather_key)
@@ -32,6 +33,8 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     fun getWeather(location: Location, language: String, units: MeasureUnits) {
         viewModelScope.launch {
+            weather = null
+            delay(3000)
             weather = weatherRepository.getWeather(
                 location = location,
                 appId = weatherKey,

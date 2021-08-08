@@ -6,6 +6,7 @@ import by.bstu.vs.stpms.lr13.data.model.Weather
 import by.bstu.vs.stpms.lr13.data.network.NetworkService
 import by.bstu.vs.stpms.lr13.data.network.model.NewsDto
 import by.bstu.vs.stpms.lr13.data.network.model.WeatherDto
+import by.bstu.vs.stpms.lr13.data.util.round
 import kotlin.math.roundToInt
 
 fun WeatherDto.toWeather(units: MeasureUnits): Weather {
@@ -15,7 +16,7 @@ fun WeatherDto.toWeather(units: MeasureUnits): Weather {
         temperature = main.temperature.toDouble().roundToInt().toString(),
         temperatureUnits = units.temperatureUnits,
         humidity = "${main.humidity}%",
-        windSpeed = "${wind.speed} ${units.speedUnits}",
+        windSpeed = "${wind.speed.toDouble().round(1)} ${units.speedUnits}",
         windDirectionDegrees = wind.deg.toDouble().roundToInt(),
         icon = this.weather.first().icon.let { NetworkService.getImageUrlByCode(it) }
     )
