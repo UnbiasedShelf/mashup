@@ -34,7 +34,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     fun getWeather(location: Location, language: String, units: MeasureUnits) {
         viewModelScope.launch {
             weather = null
-            delay(3000)
+            delay(500)
             weather = weatherRepository.getWeather(
                 location = location,
                 appId = weatherKey,

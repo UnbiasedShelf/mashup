@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
@@ -40,11 +39,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.fade
 import com.google.accompanist.placeholder.material.fade
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.util.*
@@ -134,7 +131,8 @@ class MainActivity : ComponentActivity() {
                 .fillMaxWidth()
                 .placeholder(
                     visible = weather == null,
-                    highlight = PlaceholderHighlight.shimmer()
+                    highlight = PlaceholderHighlight.fade(),
+                    color = MaterialTheme.colors.secondary
                 ),
             elevation = 4.dp,
             backgroundColor = MaterialTheme.colors.secondary
@@ -144,9 +142,8 @@ class MainActivity : ComponentActivity() {
                 .padding(16.dp)
             ) {
                 Column {
-                    PlaceholderText(
-                        text = weather?.city,
-                        placeholderSymbolLength = 20,
+                    Text(
+                        text = weather?.city ?: "",
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp
                     )
@@ -154,9 +151,8 @@ class MainActivity : ComponentActivity() {
                         thickness = 1.dp,
                         color = MaterialTheme.colors.onPrimary
                     )
-                    PlaceholderText(
-                        text = weather?.description,
-                        placeholderSymbolLength = 30,
+                    Text(
+                        text = weather?.description ?: "",
                         fontSize = 20.sp,
                         fontStyle = FontStyle.Italic
                     )
@@ -171,7 +167,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .size(150.dp)
                         )
-                        PlaceholderText(
+                        Text(
                             text = buildAnnotatedString {
                                 withStyle(
                                     style = SpanStyle(
@@ -201,9 +197,8 @@ class MainActivity : ComponentActivity() {
                                     contentDescription = "humidity",
                                 )
                                 Spacer(modifier = Modifier.width(5.dp))
-                                PlaceholderText(
-                                    text = weather?.humidity,
-                                    placeholderSymbolLength = 7,
+                                Text(
+                                    text = weather?.humidity ?: "",
                                     fontSize = 20.sp,
                                 )
                             }
@@ -214,9 +209,8 @@ class MainActivity : ComponentActivity() {
                                     contentDescription = "wind",
                                 )
                                 Spacer(modifier = Modifier.width(5.dp))
-                                PlaceholderText(
-                                    text = weather?.windSpeed,
-                                    placeholderSymbolLength = 7,
+                                Text(
+                                    text = weather?.windSpeed ?: "",
                                     fontSize = 20.sp
                                 )
                             }
@@ -228,61 +222,16 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.rotate(-(weather?.windDirectionDegrees?.toFloat() ?: 0.0f))
                                 )
                                 Spacer(modifier = Modifier.width(5.dp))
-                                PlaceholderText(
-                                    text = weather?.windDirection,
-                                    placeholderSymbolLength = 7,
+                                Text(
+                                    text = weather?.windDirection ?: "",
                                     fontSize = 20.sp
                                 )
                             }
-                            //TODO remove
-                            if (weather?.windDirection == null) {
-                                Text(text = "true")
-                            }
-
                         }
                     }
                 }
             }
         }
-    }
-
-    @Composable
-    fun PlaceholderText(
-        text: String?,
-        placeholderSymbolLength: Int,
-        modifier: Modifier = Modifier,
-        fontStyle: FontStyle? = null,
-        fontWeight: FontWeight? = null,
-        fontSize: TextUnit = TextUnit.Unspecified
-    ) {
-        PlaceholderText(
-            text = AnnotatedString(text ?: " ".repeat(placeholderSymbolLength)),
-            fontStyle = fontStyle,
-            fontSize = fontSize,
-            fontWeight = fontWeight,
-            modifier = modifier
-        )
-    }
-
-    @Composable
-    fun PlaceholderText(
-        text: AnnotatedString,
-        modifier: Modifier = Modifier,
-        fontStyle: FontStyle? = null,
-        fontWeight: FontWeight? = null,
-        fontSize: TextUnit = TextUnit.Unspecified
-    ) {
-        Log.i(TAG, "placeholder: ${text.isBlank()}")
-        Text(
-            text = text,
-            fontStyle = fontStyle,
-            fontSize = fontSize,
-            fontWeight = fontWeight,
-            modifier = modifier/*.placeholder(
-                visible = text.isBlank(),
-                highlight = PlaceholderHighlight.shimmer()
-            )*/
-        )
     }
 
     @Preview
