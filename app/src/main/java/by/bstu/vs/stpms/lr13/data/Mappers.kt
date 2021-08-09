@@ -22,13 +22,13 @@ fun WeatherDto.toWeather(units: MeasureUnits): Weather {
     )
 }
 
-fun NewsDto.toArticleList(): List<Article>? {
-    return this.articles?.map {
+fun NewsDto.toArticleList(): List<Article> {
+    return this.articles.map {
         Article(
             title = it.title,
             link = it.link,
             publishedAt = it.publishedAt,
-            imageUrl = it.imageUrl
+            imageUrl = it.imageUrl ?: "" //TODO
         )
     }
 }

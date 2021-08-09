@@ -26,7 +26,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     val isRefreshing = MutableStateFlow(false)
 
     var weather by mutableStateOf<Weather?>(null)
-    var articles: List<Article> by mutableStateOf(listOf())
+    var news: List<Article> by mutableStateOf(listOf())
 
     val weatherKey: String = application.getString(R.string.weather_key)
     val newsKey: String = application.getString(R.string.news_key)
@@ -46,7 +46,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     fun getArticles(country: String) {
         viewModelScope.launch {
-            articles = newsRepository.getNews(
+            news = newsRepository.getNews(
                 appId = newsKey,
                 country = country
             )

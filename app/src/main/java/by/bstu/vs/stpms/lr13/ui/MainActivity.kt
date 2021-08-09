@@ -7,41 +7,31 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresPermission
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import by.bstu.vs.stpms.lr13.R
 import by.bstu.vs.stpms.lr13.data.location.LocationService
+import by.bstu.vs.stpms.lr13.data.model.Article
 import by.bstu.vs.stpms.lr13.data.model.MeasureUnits
 import by.bstu.vs.stpms.lr13.data.model.Weather
 import by.bstu.vs.stpms.lr13.data.util.units
+import by.bstu.vs.stpms.lr13.ui.compose.ArticleWidget
+import by.bstu.vs.stpms.lr13.ui.compose.WeatherWidget
 import by.bstu.vs.stpms.lr13.ui.theme.MashupTheme
-import coil.compose.rememberImagePainter
+import coil.imageLoader
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.placeholder.PlaceholderHighlight
-import com.google.accompanist.placeholder.material.fade
-import com.google.accompanist.placeholder.material.placeholder
-import com.google.accompanist.placeholder.material.shimmer
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.util.*
@@ -84,170 +74,41 @@ class MainActivity : ComponentActivity() {
                             updateUI(mainViewModel)
                         }
                     }) {
-                    Column(Modifier.verticalScroll(rememberScrollState())) {
-                        PermissionRequired(
-                            permissionState = permissionState,
-                            permissionNotGrantedContent = {
-                                LaunchedEffect(true) {
-                                    permissionState.launchPermissionRequest()
-                                }
-                            },
-                            permissionNotAvailableContent = {
-                                Column {
-                                    Text(
-                                        "Location permission denied. See this FAQ with information about why we " +
-                                                "need this permission. Please, grant us access on the Settings screen."
-                                    )
-                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                }
-                            }
-                        ) {
-
+                    LazyColumn {
+                        item {
                             LaunchedEffect(true) {
                                 updateUI(mainViewModel)
                             }
+                            PermissionRequired(
+                                permissionState = permissionState,
+                                permissionNotGrantedContent = {
+                                    LaunchedEffect(true) {
+                                        permissionState.launchPermissionRequest()
+                                    }
+                                },
+                                permissionNotAvailableContent = {
+                                    Column {
+                                        Text(
+                                            "Location permission denied. See this FAQ with information about why we " +
+                                                    "need this permission. Please, grant us access on the Settings screen."
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
 
-                            WeatherWidget(
-                                weather = mainViewModel.weather
-                            )
+                                    }
+                                }
+                            ) {
+
+                                WeatherWidget(
+                                    weather = mainViewModel.weather
+                                )
+                            }
                         }
-                    }
-
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun WeatherWidget(
-        weather: Weather?
-    ) {
-        Log.i(TAG, "weather widget called: $weather")
-        Card(
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .placeholder(
-                    visible = weather == null,
-                    highlight = PlaceholderHighlight.fade(),
-                    color = MaterialTheme.colors.secondary
-                ),
-            elevation = 4.dp,
-            backgroundColor = MaterialTheme.colors.secondary
-        ) {
-            Box(modifier = Modifier
-                .height(200.dp)
-                .padding(16.dp)
-            ) {
-                Column {
-                    Text(
-                        text = weather?.city ?: "",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp
-                    )
-                    Divider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colors.onPrimary
-                    )
-                    Text(
-                        text = weather?.description ?: "",
-                        fontSize = 20.sp,
-                        fontStyle = FontStyle.Italic
-                    )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .offset(x = (-20).dp)
-                    ) {
-                        Image(
-                            painter = rememberImagePainter(weather?.icon),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(150.dp)
-                        )
-                        Text(
-                            text = buildAnnotatedString {
-                                withStyle(
-                                    style = SpanStyle(
-                                        fontSize = 60.sp
-                                    )
-                                ) {
-                                    //Spaces used to make placeholder visible
-                                    append(weather?.temperature ?: " ".repeat(6))
-                                }
-                                withStyle(style = SpanStyle(
-                                    baselineShift = BaselineShift(+2f),
-                                    fontSize = 20.sp
-                                )) {
-                                    append(weather?.temperatureUnits ?: "")
-                                }
-                            },
-                            modifier = Modifier
-                                .offset(x = (-20).dp)
-                        )
-                        Column(
-                            Modifier.fillMaxWidth()
-                        ) {
-
-                            Row {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_humidity),
-                                    contentDescription = "humidity",
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    text = weather?.humidity ?: "",
-                                    fontSize = 20.sp,
-                                )
-                            }
-
-                            Row {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_wind),
-                                    contentDescription = "wind",
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    text = weather?.windSpeed ?: "",
-                                    fontSize = 20.sp
-                                )
-                            }
-
-                            Row {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_baseline_arrow_right_alt_24),
-                                    contentDescription = "direction",
-                                    modifier = Modifier.rotate(-(weather?.windDirectionDegrees?.toFloat() ?: 0.0f))
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    text = weather?.windDirection ?: "",
-                                    fontSize = 20.sp
-                                )
-                            }
+                        items(mainViewModel.news) { article ->
+                            ArticleWidget(article = article)
                         }
                     }
                 }
             }
-        }
-    }
-
-    @Preview
-    @Composable
-    fun Preview() {
-        MashupTheme {
-            WeatherWidget(weather = Weather(
-                city = "Los Angeles",
-                description = "Clear",
-                temperature = "92",
-                temperatureUnits = "°F",
-                humidity = "40%",
-                windSpeed = "2 mph",
-                windDirectionDegrees = 0,
-                icon = ""
-            ))
         }
     }
 
@@ -263,6 +124,8 @@ class MainActivity : ComponentActivity() {
                 units = MeasureUnits.valueOf(locale.units.uppercase(locale))
             )
         }
+        //TODO country from location not locale
+        mainViewModel.getArticles(locale.country)
 
     }
 }

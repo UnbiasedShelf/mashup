@@ -6,16 +6,16 @@ import java.util.*
 
 data class NewsDto(
     @SerializedName("articles")
-    val articles: List<ArticleDto>?
+    val articles: List<ArticleDto>
 )
 
 data class ArticleDto(
     @SerializedName("title")
-    val title: String?,
+    val title: String,
     @SerializedName("url")
-    val link: String?,
+    val link: String,
     @SerializedName("publishedAt")
-    val publishedAt: Date?,
+    val publishedAt: Date,
     @SerializedName("urlToImage")
     val imageUrl: String?,
 )
