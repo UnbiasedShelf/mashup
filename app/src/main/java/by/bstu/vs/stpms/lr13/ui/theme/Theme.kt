@@ -14,10 +14,10 @@ fun MashupTheme(content: @Composable () -> Unit) {
 }
 
 private val LightColors = lightColors(
-    primary = Blue900,
-    primaryVariant = Blue900,
+    primary = Blue700,
+    primaryVariant = Blue700,
     onPrimary = Color.White,
-    secondary = Blue700,
-    secondaryVariant = Blue900,
+    secondary = Blue800,
+    secondaryVariant = Blue800,
     onSecondary = Color.White
 )

@@ -16,7 +16,7 @@ class NewsRepository {
             apiKey = appId,
             country = country
         )
-        val articles = newsDto.toArticleList() ?: listOf()
+        val articles = newsDto.toArticleList()
         Log.i(TAG, "getNews: return $articles")
         return articles
     }

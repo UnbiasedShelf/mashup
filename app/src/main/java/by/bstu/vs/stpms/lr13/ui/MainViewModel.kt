@@ -2,6 +2,7 @@ package by.bstu.vs.stpms.lr13.ui
 
 import android.app.Application
 import android.location.Location
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,9 +14,11 @@ import by.bstu.vs.stpms.lr13.data.model.MeasureUnits
 import by.bstu.vs.stpms.lr13.data.model.Weather
 import by.bstu.vs.stpms.lr13.data.repository.NewsRepository
 import by.bstu.vs.stpms.lr13.data.repository.WeatherRepository
+import by.bstu.vs.stpms.lr13.data.util.units
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.util.*
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
     private val TAG = "MainViewModel"
@@ -31,9 +34,22 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     val weatherKey: String = application.getString(R.string.weather_key)
     val newsKey: String = application.getString(R.string.news_key)
 
-    fun getWeather(location: Location, language: String, units: MeasureUnits) {
+    fun fetchData(location: Location) {
+        val locale = Locale.getDefault()
+        Log.d(TAG, "fetchData: locale $locale")
+        getWeather(
+            location = location,
+            language = locale.language,
+            units = MeasureUnits.valueOf(locale.units.uppercase(locale))
+        )
+        //TODO country from location not locale
+        getArticles(locale.country)
+    }
+
+    private fun getWeather(location: Location, language: String, units: MeasureUnits) {
         viewModelScope.launch {
             weather = null
+            news = listOf()
             delay(500)
             weather = weatherRepository.getWeather(
                 location = location,
@@ -44,11 +60,11 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun getArticles(country: String) {
+    private fun getArticles(countryCode: String) {
         viewModelScope.launch {
             news = newsRepository.getNews(
                 appId = newsKey,
-                country = country
+                country = countryCode
             )
         }
     }

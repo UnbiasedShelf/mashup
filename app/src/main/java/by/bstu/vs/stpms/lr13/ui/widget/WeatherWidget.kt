@@ -1,4 +1,4 @@
-package by.bstu.vs.stpms.lr13.ui.compose
+package by.bstu.vs.stpms.lr13.ui.widget
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -41,10 +41,10 @@ fun WeatherWidget(
             .placeholder(
                 visible = weather == null,
                 highlight = PlaceholderHighlight.fade(),
-                color = MaterialTheme.colors.secondary
+                color = MaterialTheme.colors.primary
             ),
         elevation = 4.dp,
-        backgroundColor = MaterialTheme.colors.secondary
+        backgroundColor = MaterialTheme.colors.primary
     ) {
         Box(modifier = Modifier
             .height(200.dp)

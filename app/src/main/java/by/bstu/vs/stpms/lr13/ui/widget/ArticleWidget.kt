@@ -1,4 +1,4 @@
-package by.bstu.vs.stpms.lr13.ui.compose
+package by.bstu.vs.stpms.lr13.ui.widget
 
 import android.content.Intent
 import android.net.Uri
@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import by.bstu.vs.stpms.lr13.R
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,7 +49,12 @@ fun ArticleWidget(article: Article) {
                 .height(200.dp)
         ) {
             Image(
-                painter = rememberImagePainter(article.imageUrl),
+                painter = rememberImagePainter(
+                    data = article.imageUrl,
+                    builder = {
+                        crossfade(true)
+                    }
+                ),
                 contentDescription = "Article image",
                 modifier = Modifier
                     .fillMaxSize(),
