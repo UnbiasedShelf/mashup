@@ -1,33 +1,45 @@
 package by.bstu.vs.stpms.lr13.ui.widget
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import by.bstu.vs.stpms.lr13.ui.values.itemElevation
+import by.bstu.vs.stpms.lr13.ui.values.largeFontSize
+import by.bstu.vs.stpms.lr13.ui.values.mediumFontSize
+import by.bstu.vs.stpms.lr13.ui.values.paddingSize
 
 @Composable
 fun NoConnectionWidget(onTryAgainButtonClicked: () -> Unit) {
-    Card(
-        shape = RoundedCornerShape(8.dp),
+    CardBox(
         modifier = Modifier
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
-            .fillMaxWidth(),
-        elevation = 4.dp,
+            .padding(start = paddingSize, end = paddingSize, top = paddingSize),
     ) {
         Column {
             Text(
+                //TODO localize (and other places also)
                 text = "No connection!",
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp
+                fontSize = largeFontSize
             )
+            Divider(
+                thickness = 1.dp,
+                color = Color.Black
+            )
+            Text(
+                //TODO localize (and other places also)
+                text = "This application requires network connection for receiving recent news and current weather. Please, enable network connection and try again.",
+                fontSize = mediumFontSize
+            )
+            Spacer(modifier = Modifier.weight(1f))
             Button(onClick = onTryAgainButtonClicked) {
                 Text(text = "Try again")
             }

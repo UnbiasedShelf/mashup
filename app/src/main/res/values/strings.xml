@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">My Mashup</string>
-    <string name="submit">Submit</string>
-    <string name="city">City</string>
-    <string name="empty_article">Empty article</string>
+    <string name="app_name">News &amp; Weather</string>
+    <string name="miles_per_hour">mph</string>
+    <string name="meters_per_second">m/s</string>
+    <string name="direction_north">N</string>
+    <string name="direction_west">W</string>
+    <string name="direction_south">S</string>
+    <string name="direction_east">E</string>
 </resources>

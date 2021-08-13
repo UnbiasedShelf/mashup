@@ -28,7 +28,7 @@ fun NewsDto.toArticleList(): List<Article> {
             title = it.title,
             link = it.link,
             publishedAt = it.publishedAt,
-            imageUrl = it.imageUrl ?: "" //TODO
+            imageUrl = it.imageUrl ?: "https://st4.depositphotos.com/14953852/22772/v/450/depositphotos_227725184-stock-illustration-image-available-icon-flat-vector.jpg"
         )
     }
 }

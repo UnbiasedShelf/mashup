@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Новости и погода</string>
+    <string name="miles_per_hour">ми/ч</string>
+    <string name="meters_per_second">м/с</string>
+    <string name="direction_north">С</string>
+    <string name="direction_west">З</string>
+    <string name="direction_south">Ю</string>
+    <string name="direction_east">В</string>
+</resources>

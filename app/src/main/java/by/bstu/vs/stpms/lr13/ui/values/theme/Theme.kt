@@ -1,4 +1,4 @@
-package by.bstu.vs.stpms.lr13.ui.theme
+package by.bstu.vs.stpms.lr13.ui.values.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors

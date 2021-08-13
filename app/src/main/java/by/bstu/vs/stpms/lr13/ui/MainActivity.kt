@@ -20,7 +20,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import by.bstu.vs.stpms.lr13.R
 import by.bstu.vs.stpms.lr13.data.location.LocationService
 import by.bstu.vs.stpms.lr13.data.util.isConnectedToNetwork
-import by.bstu.vs.stpms.lr13.ui.theme.MashupTheme
+import by.bstu.vs.stpms.lr13.ui.values.paddingSize
+import by.bstu.vs.stpms.lr13.ui.values.theme.MashupTheme
 import by.bstu.vs.stpms.lr13.ui.widget.ArticleWidget
 import by.bstu.vs.stpms.lr13.ui.widget.NoConnectionWidget
 import by.bstu.vs.stpms.lr13.ui.widget.WeatherWidget
@@ -33,6 +34,7 @@ import java.util.*
 
 //TODO network exception handling
 //TODO test on small screens
+//TODO logs
 class MainActivity : ComponentActivity() {
 
     private val TAG = "MainActivity"
@@ -72,6 +74,7 @@ class MainActivity : ComponentActivity() {
                     },
                     permissionNotAvailableContent = {
                         Column {
+                            //TODO work with this stuff
                             Text(
                                 "Location permission denied. See this FAQ with information about why we " +
                                         "need this permission. Please, grant us access on the Settings screen."
@@ -82,7 +85,7 @@ class MainActivity : ComponentActivity() {
                     }
                 ) {
                     var isConnected by remember {
-                        mutableStateOf(false)
+                        mutableStateOf(true)
                     }
 
                     suspend fun fetchData() {
@@ -102,14 +105,17 @@ class MainActivity : ComponentActivity() {
                             lifecycleScope.launchWhenStarted {
                                 fetchData()
                             }
-                        }) {
-
+                        }
+                    ) {
 
                         LaunchedEffect(true) {
                             fetchData()
                         }
                         if (isConnected) {
-                            LazyColumn {
+                            LazyColumn(
+                                contentPadding = PaddingValues(vertical = paddingSize),
+                                verticalArrangement = Arrangement.spacedBy(paddingSize)
+                            ) {
                                 item {
                                     WeatherWidget(weather = mainViewModel.weather)
                                 }
@@ -119,18 +125,18 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         else {
-                            NoConnectionWidget(onTryAgainButtonClicked = {
-                                lifecycleScope.launchWhenStarted {
-                                    fetchData()
+                            NoConnectionWidget(
+                                onTryAgainButtonClicked = {
+                                    lifecycleScope.launchWhenStarted {
+                                        fetchData()
+                                    }
                                 }
-                            })
+                            )
                         }
                     }
                 }
             }
         }
-
-
     }
 }
 
