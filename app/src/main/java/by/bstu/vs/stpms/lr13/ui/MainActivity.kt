@@ -24,6 +24,7 @@ import by.bstu.vs.stpms.lr13.ui.values.paddingSize
 import by.bstu.vs.stpms.lr13.ui.values.theme.MashupTheme
 import by.bstu.vs.stpms.lr13.ui.widget.ArticleWidget
 import by.bstu.vs.stpms.lr13.ui.widget.NoConnectionWidget
+import by.bstu.vs.stpms.lr13.ui.widget.NoPermissionWidget
 import by.bstu.vs.stpms.lr13.ui.widget.WeatherWidget
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionRequired
@@ -34,6 +35,7 @@ import java.util.*
 
 //TODO network exception handling
 //TODO test on small screens
+//TODO test if denied permission
 //TODO logs
 class MainActivity : ComponentActivity() {
 
@@ -68,20 +70,14 @@ class MainActivity : ComponentActivity() {
                 PermissionRequired(
                     permissionState = permissionState,
                     permissionNotGrantedContent = {
-                        LaunchedEffect(true) {
+                        NoPermissionWidget(onButtonClicked = {
                             permissionState.launchPermissionRequest()
-                        }
+                        })
                     },
                     permissionNotAvailableContent = {
-                        Column {
-                            //TODO work with this stuff
-                            Text(
-                                "Location permission denied. See this FAQ with information about why we " +
-                                        "need this permission. Please, grant us access on the Settings screen."
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                        }
+                        NoPermissionWidget(onButtonClicked = {
+                            permissionState.launchPermissionRequest()
+                        })
                     }
                 ) {
                     var isConnected by remember {

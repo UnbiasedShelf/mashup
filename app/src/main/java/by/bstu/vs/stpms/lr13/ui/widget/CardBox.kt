@@ -28,7 +28,7 @@ fun CardBox(
     ) {
         Box(
             modifier = Modifier
-                .height(itemHeight)
+                .defaultMinSize(minHeight = itemHeight)
                 .padding(padding),
             content = content
         )

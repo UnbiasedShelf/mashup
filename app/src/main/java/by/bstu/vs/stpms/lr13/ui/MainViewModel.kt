@@ -42,7 +42,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
             language = locale.language,
             units = locale.units
         )
-        //TODO country from location not locale
         getArticles(locale)
     }
 

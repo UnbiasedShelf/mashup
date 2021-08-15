@@ -1,9 +1,9 @@
 package by.bstu.vs.stpms.lr13.ui.widget
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,22 +12,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import by.bstu.vs.stpms.lr13.R
-import by.bstu.vs.stpms.lr13.ui.values.itemElevation
 import by.bstu.vs.stpms.lr13.ui.values.largeFontSize
 import by.bstu.vs.stpms.lr13.ui.values.mediumFontSize
 import by.bstu.vs.stpms.lr13.ui.values.paddingSize
 
 @Composable
-fun NoConnectionWidget(onTryAgainButtonClicked: () -> Unit) {
+fun NoPermissionWidget(onButtonClicked: () -> Unit) {
     CardBox(
-        modifier = Modifier
-            .padding(start = paddingSize, end = paddingSize, top = paddingSize),
+        modifier = Modifier.padding(all = paddingSize)
     ) {
         Column {
             Text(
-                text = stringResource(R.string.no_connection),
+                text = stringResource(R.string.location_permission),
                 fontWeight = FontWeight.Bold,
                 fontSize = largeFontSize
             )
@@ -36,14 +33,14 @@ fun NoConnectionWidget(onTryAgainButtonClicked: () -> Unit) {
                 color = Color.Black
             )
             Text(
-                text = stringResource(R.string.no_connection_info),
+                text = stringResource(R.string.location_permission_info),
                 fontSize = mediumFontSize
             )
             Button(
-                onClick = onTryAgainButtonClicked,
+                onClick = onButtonClicked,
                 modifier = Modifier.padding(top = paddingSize)
             ) {
-                Text(text = stringResource(R.string.try_again))
+                Text(text = stringResource(R.string.request_permission))
             }
         }
     }

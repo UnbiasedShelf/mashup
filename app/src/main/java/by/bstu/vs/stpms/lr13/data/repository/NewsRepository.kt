@@ -17,7 +17,7 @@ class NewsRepository {
             country = country
         )
         val articles = newsDto.toArticleList()
-        Log.i(TAG, "getNews: return $articles")
+        Log.i(TAG, "getNews: return ${articles.size} for country $country")
         return articles
     }
 }

@@ -77,7 +77,7 @@ fun WeatherWidget(
                         contentDescription = "Weather icon",
                         modifier = Modifier
                             .height(150.dp)
-                            .width(100.dp),
+                            .width(110.dp),
                         contentScale = ContentScale.FillHeight
                     )
                     Text(
