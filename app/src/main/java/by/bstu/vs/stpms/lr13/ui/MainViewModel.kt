@@ -22,7 +22,7 @@ import java.util.*
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
     private val TAG = "MainViewModel"
-    //TODO di
+
     var newsRepository = NewsRepository()
     var weatherRepository = WeatherRepository()
 
@@ -40,17 +40,16 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         getWeather(
             location = location,
             language = locale.language,
-            units = MeasureUnits.valueOf(locale.units.uppercase(locale))
+            units = locale.units
         )
         //TODO country from location not locale
-        getArticles(locale.country)
+        getArticles(locale)
     }
 
     private fun getWeather(location: Location, language: String, units: MeasureUnits) {
         viewModelScope.launch {
             weather = null
             news = listOf()
-            delay(500)
             weather = weatherRepository.getWeather(
                 location = location,
                 appId = weatherKey,
@@ -60,12 +59,18 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    private fun getArticles(countryCode: String) {
+    private fun getArticles(locale: Locale) {
         viewModelScope.launch {
             news = newsRepository.getNews(
                 appId = newsKey,
-                country = countryCode
+                country = locale.country
             )
+            if (news.isEmpty()) {
+                news = newsRepository.getNews(
+                    appId = newsKey,
+                    country = locale.language
+                )
+            }
         }
     }
 

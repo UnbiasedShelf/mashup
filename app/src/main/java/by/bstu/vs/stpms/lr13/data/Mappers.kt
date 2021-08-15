@@ -13,10 +13,10 @@ fun WeatherDto.toWeather(units: MeasureUnits): Weather {
     return Weather(
         city = name,
         description = weather.first().description,
-        temperature = main.temperature.toDouble().roundToInt().toString(),
-        temperatureUnits = units.temperatureUnits,
-        humidity = "${main.humidity}%",
-        windSpeed = "${wind.speed.toDouble().round(1)} ${units.speedUnits}",
+        temperature = main.temperature.toDouble(),
+        humidity = main.humidity.toInt(),
+        windSpeed = wind.speed.toDouble(),
+        measureUnits = units,
         windDirectionDegrees = wind.deg.toDouble().roundToInt(),
         icon = this.weather.first().icon.let { NetworkService.getImageUrlByCode(it) }
     )
@@ -28,7 +28,7 @@ fun NewsDto.toArticleList(): List<Article> {
             title = it.title,
             link = it.link,
             publishedAt = it.publishedAt,
-            imageUrl = it.imageUrl ?: "https://st4.depositphotos.com/14953852/22772/v/450/depositphotos_227725184-stock-illustration-image-available-icon-flat-vector.jpg"
+            imageUrl = it.imageUrl ?: ""
         )
     }
 }

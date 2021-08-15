@@ -6,4 +6,7 @@
     <string name="direction_west">З</string>
     <string name="direction_south">Ю</string>
     <string name="direction_east">В</string>
+    <string name="no_connection">Нет соединения!</string>
+    <string name="no_connection_info">Данному приложению необходимо интернет-соединение для получения актуальных новостей и текущей погоды. Пожалуйста, подключитесь к сети интернет и попробуйте снова.</string>
+    <string name="try_again">Повторить</string>
 </resources>

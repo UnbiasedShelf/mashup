@@ -45,10 +45,15 @@ fun ArticleWidget(article: Article) {
             },
         padding = 0.dp
     ) {
-        //TODO placeholder if image == null
         Image(
             painter = rememberImagePainter(
-                data = article.imageUrl,
+                data = article.imageUrl.let {
+                    if (it.isNotEmpty()) {
+                        it
+                    } else {
+                        LocalContext.current.getString(R.string.default_article_image_url)
+                    }
+                },
                 builder = {
                     crossfade(true)
                 }

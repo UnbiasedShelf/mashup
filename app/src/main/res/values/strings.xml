@@ -6,4 +6,8 @@
     <string name="direction_west">W</string>
     <string name="direction_south">S</string>
     <string name="direction_east">E</string>
+    <string name="default_article_image_url" translatable="false">https://st4.depositphotos.com/14953852/22772/v/450/depositphotos_227725184-stock-illustration-image-available-icon-flat-vector.jpg</string>
+    <string name="no_connection">No connection!</string>
+    <string name="no_connection_info">This application requires network connection for receiving recent news and current weather. Please, enable network connection and try again.</string>
+    <string name="try_again">Try again</string>
 </resources>

@@ -3,20 +3,19 @@ package by.bstu.vs.stpms.lr13.data.util
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.text.format.DateUtils
 import android.text.format.DateUtils.MINUTE_IN_MILLIS
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import by.bstu.vs.stpms.lr13.R
+import by.bstu.vs.stpms.lr13.data.model.MeasureUnits
 import java.util.*
 import kotlin.math.round
 
-val Locale.units: String
+val Locale.units: MeasureUnits
 get() {
     return when(country) {
-        "US", "LR", "MM" -> "imperial"
-        else -> "metric"
+        "US", "LR", "MM" -> MeasureUnits.IMPERIAL
+        else -> MeasureUnits.METRIC
     }
 }
 
@@ -30,6 +29,22 @@ fun Date.articleFormat(): String = DateUtils
     .getRelativeTimeSpanString(this.time, Date().time, MINUTE_IN_MILLIS)
     .toString()
 
+fun Context.getLocalizedWindDirection(rawDirection: String) = rawDirection
+    .map {
+        when(it) {
+            'N' -> getString(R.string.direction_north)
+            'W' -> getString(R.string.direction_west)
+            'S' -> getString(R.string.direction_south)
+            'E' -> getString(R.string.direction_east)
+            else -> "-"
+        }
+    }
+    .joinToString(separator = "")
+
+fun Context.getLocalizedSpeedUnits(units: MeasureUnits) = when(units) {
+    MeasureUnits.IMPERIAL -> getString(R.string.miles_per_hour)
+    MeasureUnits.METRIC -> getString(R.string.meters_per_second)
+}
 
 fun isConnectedToNetwork(context: Context): Boolean {
     val isConnected: Boolean

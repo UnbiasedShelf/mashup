@@ -9,9 +9,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import by.bstu.vs.stpms.lr13.R
 import by.bstu.vs.stpms.lr13.ui.values.itemElevation
 import by.bstu.vs.stpms.lr13.ui.values.largeFontSize
 import by.bstu.vs.stpms.lr13.ui.values.mediumFontSize
@@ -25,8 +27,7 @@ fun NoConnectionWidget(onTryAgainButtonClicked: () -> Unit) {
     ) {
         Column {
             Text(
-                //TODO localize (and other places also)
-                text = "No connection!",
+                text = stringResource(R.string.no_connection),
                 fontWeight = FontWeight.Bold,
                 fontSize = largeFontSize
             )
@@ -35,13 +36,12 @@ fun NoConnectionWidget(onTryAgainButtonClicked: () -> Unit) {
                 color = Color.Black
             )
             Text(
-                //TODO localize (and other places also)
-                text = "This application requires network connection for receiving recent news and current weather. Please, enable network connection and try again.",
+                text = stringResource(R.string.no_connection_info),
                 fontSize = mediumFontSize
             )
             Spacer(modifier = Modifier.weight(1f))
             Button(onClick = onTryAgainButtonClicked) {
-                Text(text = "Try again")
+                Text(text = stringResource(R.string.try_again))
             }
         }
     }

@@ -8,7 +8,7 @@ import by.bstu.vs.stpms.lr13.data.toArticleList
 
 class NewsRepository {
     val TAG = "NewsRepository"
-    //TODO di
+
     val newsApi: ApiNews = NetworkService.newsService()
 
     suspend fun getNews(appId: String, country: String): List<Article> {

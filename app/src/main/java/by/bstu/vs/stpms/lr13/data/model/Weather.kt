@@ -1,13 +1,12 @@
 package by.bstu.vs.stpms.lr13.data.model
 
-//TODO remove string to resources
 data class Weather(
     val city: String,
     val description: String,
-    val temperature: String,
-    val temperatureUnits: String,
-    val humidity: String,
-    val windSpeed: String,
+    val temperature: Double,
+    val humidity: Int,
+    val windSpeed: Double,
+    val measureUnits: MeasureUnits,
     val windDirectionDegrees: Int,
     val icon: String
 ) {

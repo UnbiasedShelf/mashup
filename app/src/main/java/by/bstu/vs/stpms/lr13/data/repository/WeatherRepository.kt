@@ -10,7 +10,7 @@ import by.bstu.vs.stpms.lr13.data.toWeather
 
 class WeatherRepository {
     val TAG = "WeatherRepository"
-    //TODO di
+
     val weatherApi: ApiWeather = NetworkService.weatherService()
 
     suspend fun getWeather(location: Location, appId: String, units: MeasureUnits, language: String): Weather {
