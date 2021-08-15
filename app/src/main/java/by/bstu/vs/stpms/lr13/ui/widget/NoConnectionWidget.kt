@@ -24,6 +24,7 @@ fun NoConnectionWidget(onTryAgainButtonClicked: () -> Unit) {
     CardBox(
         modifier = Modifier
             .padding(start = paddingSize, end = paddingSize, top = paddingSize),
+        isGrowable = true
     ) {
         Column {
             Text(

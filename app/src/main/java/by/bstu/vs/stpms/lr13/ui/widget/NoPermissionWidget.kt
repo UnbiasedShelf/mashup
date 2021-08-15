@@ -1,7 +1,6 @@
 package by.bstu.vs.stpms.lr13.ui.widget
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
@@ -20,7 +19,8 @@ import by.bstu.vs.stpms.lr13.ui.values.paddingSize
 @Composable
 fun NoPermissionWidget(onButtonClicked: () -> Unit) {
     CardBox(
-        modifier = Modifier.padding(all = paddingSize)
+        modifier = Modifier.padding(all = paddingSize),
+        isGrowable = true
     ) {
         Column {
             Text(

@@ -33,9 +33,6 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.util.*
 
-//TODO network exception handling
-//TODO test on small screens
-//TODO test if denied permission
 //TODO logs
 class MainActivity : ComponentActivity() {
 

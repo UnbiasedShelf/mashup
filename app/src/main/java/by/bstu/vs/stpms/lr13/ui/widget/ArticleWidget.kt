@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat.startActivity
 import by.bstu.vs.stpms.lr13.R
 import by.bstu.vs.stpms.lr13.data.model.Article
 import by.bstu.vs.stpms.lr13.data.util.articleFormat
+import by.bstu.vs.stpms.lr13.data.util.isImageUrlValid
 import by.bstu.vs.stpms.lr13.ui.values.mediumFontSize
 import by.bstu.vs.stpms.lr13.ui.values.paddingSize
 import by.bstu.vs.stpms.lr13.ui.values.theme.MashupTheme
@@ -48,7 +49,7 @@ fun ArticleWidget(article: Article) {
         Image(
             painter = rememberImagePainter(
                 data = article.imageUrl.let {
-                    if (it.isNotEmpty()) {
+                    if (it.isImageUrlValid()) {
                         it
                     } else {
                         LocalContext.current.getString(R.string.default_article_image_url)

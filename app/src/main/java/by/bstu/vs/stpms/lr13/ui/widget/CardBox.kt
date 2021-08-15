@@ -16,6 +16,7 @@ import by.bstu.vs.stpms.lr13.ui.values.paddingSize
 @Composable
 fun CardBox(
     modifier: Modifier = Modifier,
+    isGrowable: Boolean = false,
     backgroundColor: Color = MaterialTheme.colors.surface,
     padding: Dp = paddingSize,
     content: @Composable BoxScope.() -> Unit
@@ -27,8 +28,13 @@ fun CardBox(
         backgroundColor = backgroundColor
     ) {
         Box(
-            modifier = Modifier
-                .defaultMinSize(minHeight = itemHeight)
+            modifier = if(isGrowable) {
+                Modifier
+                    .defaultMinSize(minHeight = itemHeight)
+            } else {
+                Modifier
+                    .height(itemHeight)
+            }
                 .padding(padding),
             content = content
         )

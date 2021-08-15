@@ -19,6 +19,11 @@ get() {
     }
 }
 
+fun String.isImageUrlValid(): Boolean {
+    val imageUrlPattern = "(https?:\\/\\/.*\\.(?:png|jpg|jpeg)(\\?|&.*)?)"
+    return this.matches(imageUrlPattern.toRegex())
+}
+
 fun Double.round(decimals: Int): Double {
     var multiplier = 1.0
     repeat(decimals) { multiplier *= 10 }
