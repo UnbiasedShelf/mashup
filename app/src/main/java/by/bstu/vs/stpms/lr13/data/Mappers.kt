@@ -9,6 +9,9 @@ import by.bstu.vs.stpms.lr13.data.network.model.WeatherDto
 import by.bstu.vs.stpms.lr13.data.util.round
 import kotlin.math.roundToInt
 
+/**
+ * Maps [WeatherDto] to [Weather]
+ */
 fun WeatherDto.toWeather(units: MeasureUnits): Weather {
     return Weather(
         city = name,
@@ -22,6 +25,9 @@ fun WeatherDto.toWeather(units: MeasureUnits): Weather {
     )
 }
 
+/**
+ * Maps [NewsDto] to list of [Article]
+ */
 fun NewsDto.toArticleList(): List<Article> {
     return this.articles.map {
         Article(
