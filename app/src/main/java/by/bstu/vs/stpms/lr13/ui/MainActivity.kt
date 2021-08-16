@@ -33,7 +33,6 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import java.util.*
 
-//TODO logs
 class MainActivity : ComponentActivity() {
 
     private val TAG = "MainActivity"
@@ -96,12 +95,14 @@ class MainActivity : ComponentActivity() {
                         state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
                         onRefresh = {
                             lifecycleScope.launchWhenStarted {
+                                Log.i(TAG, "MainScreen: on refresh fetchData() call")
                                 fetchData()
                             }
                         }
                     ) {
 
                         LaunchedEffect(true) {
+                            Log.i(TAG, "MainScreen: initial fetchData() call")
                             fetchData()
                         }
                         if (isConnected) {
@@ -121,6 +122,7 @@ class MainActivity : ComponentActivity() {
                             NoConnectionWidget(
                                 onTryAgainButtonClicked = {
                                     lifecycleScope.launchWhenStarted {
+                                        Log.i(TAG, "MainScreen: on try again button clicked fetchData() call")
                                         fetchData()
                                     }
                                 }

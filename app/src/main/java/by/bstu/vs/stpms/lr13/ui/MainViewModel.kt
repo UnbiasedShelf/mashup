@@ -48,28 +48,34 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     private fun getWeather(location: Location, language: String, units: MeasureUnits) {
         viewModelScope.launch {
             weather = null
-            news = listOf()
             weather = weatherRepository.getWeather(
                 location = location,
                 appId = weatherKey,
                 units = units,
                 language = language
             )
+            Log.i(TAG, "getWeather: for location: $location, " +
+                    "language: $language, measure units: $units, received weather: $weather")
         }
     }
 
     private fun getArticles(locale: Locale) {
         viewModelScope.launch {
+            news = listOf()
             news = newsRepository.getNews(
                 appId = newsKey,
                 country = locale.country
             )
             if (news.isEmpty()) {
+                val language = locale.language
+                Log.w(TAG, "getArticles: API returns empty list for country: ${locale.country}" +
+                        ", trying to get articles by locale language $language.")
                 news = newsRepository.getNews(
                     appId = newsKey,
-                    country = locale.language
+                    country = language
                 )
             }
+            Log.i(TAG, "getArticles: for locale $locale received news of size ${news.size}")
         }
     }
 
