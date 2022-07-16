@@ -1,4 +1,4 @@
-## [Mashup](https://github.com/Vladislav2147/mashup)
+## Mashup
 **Description**: Mashup application that using weather API & news API
 
 **Technologies**: 
